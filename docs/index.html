@@ -1,123 +1,167 @@
-
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Continuium - Stories</title>
-<link href="styles/styles.css" rel="stylesheet"/>
-<style>
-  body {
-    font-family: sans-serif;
-    font-size: 0.9em;
-    line-height: 1.4;
-    margin: 1.5em;
-  }
-  #articles a {
-    display: block;
-    margin-bottom: 0.4em;
-    color: #0056b3;
-    text-decoration: none;
-  }
-  #articles a:hover {
-    text-decoration: underline;
-  }
-  .article {
-    margin-bottom: 20px;
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 10px;
-  }
-  .article-title {
-    font-weight: bold;
-    font-size: 16px;
-  }
-  .article-meta {
-    color: #777;
-    font-size: 12px;
-  }
-  .tooltip {
-    display: inline-block;
-    position: relative;
-    margin-left: 6px;
-    cursor: pointer;
-  }
-  .tooltip .tooltiptext {
-    visibility: hidden;
-    width: 240px;
-    background-color: #333;
-    color: #fff;
-    text-align: left;
-    border-radius: 4px;
-    padding: 6px;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 0;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  .tooltip:hover .tooltiptext {
-    visibility: visible;
-    opacity: 1;
-  }  
-</style></head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Continuum Stories</title>
+  <link href="styles/styles.css" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin: 0;
+      background: #f3f3f1;
+      color: #222;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 56px auto;
+      background: #ffffff;
+      padding: 44px 48px;
+      border-radius: 14px;
+      box-sizing: border-box;
+    }
+
+    .site-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin: 0 0 10px 0;
+      color: #111;
+    }
+
+    .site-subtitle {
+      font-size: 1.05rem;
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      font-size: 1.9rem;
+      line-height: 1.2;
+      margin: 0 0 24px 0;
+      color: #111;
+    }
+
+    #articles a {
+      color: #2d5ea8;
+      text-decoration: none;
+    }
+
+    #articles a:hover {
+      text-decoration: underline;
+    }
+
+    .article {
+      margin-bottom: 22px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 16px;
+    }
+
+    .article:last-child {
+      border-bottom: none;
+    }
+
+    .article-title {
+      font-weight: 700;
+      font-size: 1.08rem;
+      line-height: 1.35;
+    }
+
+    .article-meta {
+      color: #777;
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+
+    footer {
+      margin-top: 36px;
+      padding-top: 20px;
+      border-top: 1px solid #e5e5e5;
+    }
+
+    footer p {
+      font-size: 0.9rem;
+      color: #777;
+      margin: 0;
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        margin: 24px 16px;
+        padding: 28px 22px;
+      }
+
+      .site-title {
+        font-size: 1.8rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
 <body>
-<h2><div class="site-title">Continuum - Stories</div></h2>
-<div class="site-subtitle">Decentralized.  Sovereign. Free. </div>
-<div class="container">
-<h1>Latest Articles</h1>
-<div id="articles"></div>
-<footer>
-<p style="font-size: 0.85em; color: #777;">
-        Powered by <a href="https://nostr.com" target="_blank">Nostr</a> + <a href="https://github.com/features/actions" target="_blank">GitHub Actions</a><br/>
-        Content licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a> <br> <br/>
-         © 2025-2026 - Continuum. All rights reserved. 
-      </br></p>
-</footer>
-</div>
+  <div class="container">
+    <div class="site-title">Continuum Stories</div>
+    <div class="site-subtitle">Workflows, experiments, and real publishing pipelines built with Continuum.</div>
 
-<script>
-  fetch('./articles/index.json')
-    .then(response => response.json())
-    .then(data => {
-      const container = document.getElementById('articles');
-      data.slice(0, 10).forEach(article => {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'article';
+    <h1>Latest Articles</h1>
+    <div id="articles"></div>
 
-        const titleWrapper = document.createElement('div');
-        titleWrapper.style.display = 'flex';
-        titleWrapper.style.alignItems = 'center';
-        titleWrapper.style.gap = '8px';
+    <footer>
+      <p>
+        Powered by <a href="https://nostr.com" target="_blank" rel="noopener noreferrer">Nostr</a> +
+        <a href="https://github.com/features/actions" target="_blank" rel="noopener noreferrer">GitHub Actions</a><br/>
+        Content licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a><br/><br/>
+        © 2025–2026 Continuum. All rights reserved.
+      </p>
+    </footer>
+  </div>
 
-        const title = document.createElement('a');
-        title.className = 'article-title';
-        title.href = './articles/' + article.slug + '/';
-        title.textContent = article.title;
+  <script>
+    fetch('./articles/index.json')
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById('articles');
+        data.slice(0, 10).forEach(article => {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'article';
 
-        const originalLink = document.createElement('a');
-        originalLink.href = article.original_url || '#';
-        originalLink.target = '_blank';
-        originalLink.rel = 'noopener noreferrer';
-        originalLink.title = article.original_url || 'Original post not available';
-        originalLink.textContent = '↗';
-        originalLink.style.textDecoration = 'none';
-        originalLink.style.fontSize = '0.85em';
+          const titleWrapper = document.createElement('div');
+          titleWrapper.style.display = 'flex';
+          titleWrapper.style.alignItems = 'center';
+          titleWrapper.style.gap = '8px';
 
-        titleWrapper.appendChild(title);
-        titleWrapper.appendChild(originalLink);
+          const title = document.createElement('a');
+          title.className = 'article-title';
+          title.href = './articles/' + article.slug + '/';
+          title.textContent = article.title;
 
-        const meta = document.createElement('div');
-        meta.className = 'article-meta';
-        meta.textContent = article.date;
+          const originalLink = document.createElement('a');
+          originalLink.href = article.original_url || '#';
+          originalLink.target = '_blank';
+          originalLink.rel = 'noopener noreferrer';
+          originalLink.title = article.original_url || 'Original post not available';
+          originalLink.textContent = '↗';
+          originalLink.style.textDecoration = 'none';
+          originalLink.style.fontSize = '0.9em';
 
-        wrapper.appendChild(titleWrapper);
-        wrapper.appendChild(meta);
-        container.appendChild(wrapper);
+          titleWrapper.appendChild(title);
+          titleWrapper.appendChild(originalLink);
+
+          const meta = document.createElement('div');
+          meta.className = 'article-meta';
+          meta.textContent = article.date;
+
+          wrapper.appendChild(titleWrapper);
+          wrapper.appendChild(meta);
+          container.appendChild(wrapper);
+        });
       });
-    });
-</script>
-
+  </script>
 </body>
 </html>
