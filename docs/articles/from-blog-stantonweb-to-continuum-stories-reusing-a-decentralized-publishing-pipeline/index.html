@@ -1,0 +1,233 @@
+<html><body>
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <title>Continuum - Stories</title>
+                        <link rel="stylesheet" href="../../styles/styles.css" />
+                    </head>
+                    <body>
+                        <h2><div class="site-title">Continuum - Stories</div></h2>
+                        <div class="site-subtitle">Decentralized.  Sovereign. Free. </div>
+                <div class="container">
+        <h1>From Blog.StantonWeb to Continuum Stories  - Reusing a Decentralized Publishing Pipeline</h1>
+        <p><em>Published: April 17, 2026 at 04:57 PM PDT &nbsp; | &nbsp; Updated: April 17, 2026 at 04:57 PM PDT</em></p>
+        <img src='https://2026.mycontinuum.xyz/archive/pro/nostr/npub19wvckp8z58lxs4djuz43pwujka6tthaq77yjd3axttsgppnj0ersgdguvd/images/6_friday.jpg' alt='Hero image' style='max-width: 100%; margin-bottom: 20px;'/>
+        <p><strong>Last summer, I built a decentralized blog using Nostr, GitHub Actions, and GitHub Pages. I’m now taking that same idea and applying it directly to Continuum — turning tagged articles into a live, automatically updating site with zero manual publishing steps.</strong></p>
+        <div class='tags'><span class='tag'>#continuum</span><span class='tag'>#nostr</span><span class='tag'>#github-actions</span><span class='tag'>#local-first publishing workflow</span><span class='tag'>#decentralized-cms</span><span class='tag'>#continuum-stories</span><span class='tag'>#blog</span><span class='tag'>#article</span></div>
+        <p>Friday, April 17, 2026</p>
+<hr />
+<h2>Introduction</h2>
+<p>Last summer, I built something that quietly changed how I think about publishing.</p>
+<p>Not a new app.<br />
+Not a platform.<br />
+Not a SaaS dashboard.</p>
+<p>A pipeline.</p>
+<p>Using Nostr as the content layer, GitHub Actions for automation, and GitHub Pages for hosting, I created a system where:</p>
+<ul>
+<li>I write once  </li>
+<li>publish as a Nostr event  </li>
+<li>and a live site updates automatically  </li>
+</ul>
+<p>No login.<br />
+No CMS.<br />
+No “publish” button on a website.</p>
+<p>Just content moving across open infrastructure.</p>
+<p>As I wrote at the time:</p>
+<blockquote>
+<p>“This post was published as a Nostr event — stored on dozens of relays, fetched with open-source scripts, rendered as static HTML, and served globally via GitHub Pages.”</p>
+</blockquote>
+<p>Here are the original articles (stored in my archive system):</p>
+<p>https://nostr.mycontinuum.xyz/e/?event_id=64022bc7694b63d9ccc2e6b335d285c974126a469bf79cd71f6a3c86848fc2aa</p>
+<p>and</p>
+<p>https://nostr.mycontinuum.xyz/e/?event_id=65e4991ab079fe3edce13389714d95ae971618b4fe2a4ac668a23f9e210b3808</p>
+<hr />
+<h2>What I Built (Last Summer)</h2>
+<p>The core idea was simple:</p>
+<p><strong>Write → Publish to Nostr → Fetch → Render → Host</strong></p>
+<p>More concretely:</p>
+<ol>
+<li>I write an article using a Nostr client (Primal, etc.)</li>
+<li>It’s published as a <code>kind:30023</code> event</li>
+<li>A script fetches my public events from multiple relays</li>
+<li>Filters by tags (<code>blog</code>, <code>article</code>)</li>
+<li>Converts Markdown → HTML</li>
+<li>Outputs static files</li>
+<li>GitHub Pages hosts the result</li>
+</ol>
+<p>And then I added automation:</p>
+<blockquote>
+<p>“Just post on Nostr — the rest happens automatically.”</p>
+</blockquote>
+<p>That was the real breakthrough.</p>
+<hr />
+<h2>What Made It Different</h2>
+<p>There were a few key properties that mattered:</p>
+<ul>
+<li><strong>No database I control (or lose)</strong></li>
+<li><strong>No login system</strong></li>
+<li><strong>No dependency on a platform</strong></li>
+<li><strong>Content is signed and public</strong></li>
+<li><strong>Hosting is static and free</strong></li>
+</ul>
+<p>And most importantly:</p>
+<blockquote>
+<p>The publishing pipeline is <strong>separate from the writing experience</strong></p>
+</blockquote>
+<hr />
+<h2>Bringing This Into Continuum</h2>
+<p>Now I’m taking that exact idea and applying it to Continuum.</p>
+<p>Not by rebuilding it.</p>
+<p>By reusing it.</p>
+<hr />
+<h2>The New Direction: Continuum Stories</h2>
+<p>Instead of:</p>
+<blockquote>
+<p>blog.stantonweb.com</p>
+</blockquote>
+<p>I’m creating:</p>
+<blockquote>
+<p><strong>stories.mycontinuum.xyz</strong></p>
+</blockquote>
+<p>But the model is the same.</p>
+<hr />
+<h2>The Only Input That Matters: Tags</h2>
+<p>Here’s the key shift:</p>
+<p><strong>Write in Continuum → Publish → Tag correctly → Done</strong></p>
+<p>That’s it.</p>
+<p>No:</p>
+<ul>
+<li>export step  </li>
+<li>repo commit  </li>
+<li>manual push  </li>
+<li>CMS dashboard  </li>
+</ul>
+<hr />
+<h2>How It Works</h2>
+<ol>
+<li>I write an article in Continuum  </li>
+<li>Publish it to my public npub  </li>
+<li>Add a tag like:</li>
+</ol>
+<p><strong>continuum-stories</strong></p>
+<ol>
+<li>
+<p>The site tooling:</p>
+</li>
+<li>
+<p>fetches my public events  </p>
+</li>
+<li>filters by those tags  </li>
+<li>renders them into a static site  </li>
+</ol>
+<hr />
+<h2>Same Pipeline, New Surface</h2>
+<p>This is the exact same architecture I described last summer:</p>
+<ul>
+<li>Nostr = content layer  </li>
+<li>GitHub Actions = automation  </li>
+<li>GitHub Pages = hosting  </li>
+</ul>
+<p>But now:</p>
+<blockquote>
+<p><strong>Continuum is the authoring layer</strong></p>
+</blockquote>
+<hr />
+<h2>Why This Matters</h2>
+<p>This is not about blogging.</p>
+<p>It’s about control.</p>
+<p>Most publishing today looks like this:</p>
+<p><strong>Write → Save → Publish → Platform owns distribution</strong></p>
+<p>This flips it:</p>
+<p><strong>Write locally → Publish to open network → Render anywhere</strong></p>
+<hr />
+<h2>No “Export,” No “Push,” No “Sync”</h2>
+<p>This is the part that matters most to me:</p>
+<blockquote>
+<p>The system reacts to the content — not the other way around.</p>
+</blockquote>
+<p>I don’t “deploy” anything.</p>
+<p>I don’t “upload” anything.</p>
+<p>I don’t “log in” anywhere.</p>
+<p>I just:</p>
+<blockquote>
+<p><strong>publish an event with the right tags</strong></p>
+</blockquote>
+<p>And everything else happens automatically.</p>
+<hr />
+<h2>The Tag Is the Interface</h2>
+<p>This is the simplest way to describe it:</p>
+<blockquote>
+<p><strong>Tags control what becomes a site</strong></p>
+</blockquote>
+<p>Not a CMS.<br />
+Not a dashboard.<br />
+Not a config file.</p>
+<p>Just:</p>
+<p><strong>["t", "continuum-stories"]</strong></p>
+<hr />
+<h2>Why I’m Doing This</h2>
+<p>Over the past few days, I tested whether Continuum could fit into other workflows.</p>
+<p>Some worked.<br />
+Some didn’t.</p>
+<p>That’s fine.</p>
+<p>But this one?</p>
+<p>This one is real.</p>
+<p>Because:</p>
+<ul>
+<li>I already built it once  </li>
+<li>I already use it  </li>
+<li>I already understand it  </li>
+</ul>
+<hr />
+<h2>What This Proves</h2>
+<p>Continuum is not just:</p>
+<ul>
+<li>a writing tool  </li>
+<li>a dashboard  </li>
+<li>a local app  </li>
+</ul>
+<p>It can be:</p>
+<blockquote>
+<p><strong>the front-end to a fully automated, decentralized publishing pipeline</strong></p>
+</blockquote>
+<hr />
+<h2>What Comes Next</h2>
+<ul>
+<li>build <code>stories.mycontinuum.xyz</code></li>
+<li>define tag structure cleanly</li>
+<li>connect it to my npub</li>
+<li>start publishing Continuum-based workflows</li>
+</ul>
+<p>Each article becomes:</p>
+<ul>
+<li>a story  </li>
+<li>a demo  </li>
+<li>a real use case  </li>
+</ul>
+<hr />
+<h2>Final Thought</h2>
+<p>Last summer, I proved this could work.</p>
+<p>Now I’m integrating it directly into how I build and publish with Continuum.</p>
+<p>No new system.</p>
+<p>No new platform.</p>
+<p>Just:</p>
+<blockquote>
+<p><strong>the same idea — applied more intentionally</strong></p>
+</blockquote>
+<p>One article at a time.</p>
+        <p style="font-size: 0.8em; color: #777;">
+            Original post: <a href="https://tinyurl.com/25945v9k" target="_blank">https://tinyurl.com/25945v9k</a>
+        </p>
+
+        <footer>
+            <p style="font-size: 0.85em; color: #777;">
+            Powered by <a href="https://nostr.com" target="_blank">Nostr</a> + <a href="https://github.com/features/actions" target="_blank">GitHub Actions</a><br/>
+            Content licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a> <br> <br/>
+                © 2025-2026 - Continuum. All rights reserved. 
+            </br></p>
+        </footer>
+        
+        </div>
+        </body></html>

@@ -1,0 +1,1 @@
+docker build --no-cache -t  nostr-stories-my-continuum-fetcher .
