@@ -1,178 +1,190 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>Continuum Stories</title>
-  <link href="styles/styles.css" rel="stylesheet"/>
+<meta charset="UTF-8">
+<title>Continuum Stories</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="/styles/style.css">
 <style>
-  body {
-    margin: 0;
-    background: #f3f3f1;
-    color: #222;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    line-height: 1.6;
-  }
-
-  .container {
-    max-width: 880px;
-    margin: 64px auto;
-    background: #ffffff;
-    padding: 48px 56px;
-    border-radius: 16px;
-    box-sizing: border-box;
-  }
-
-  /* ===== Typography ===== */
-
-  .site-title {
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 2.8rem;
-    font-weight: 700;
-    line-height: 1.1;
-    margin-bottom: 10px;
-    color: #111;
-  }
-
-  .site-subtitle {
-    font-size: 1.1rem;
-    color: #555;
-    margin-bottom: 36px;
-    font-style: italic;
-  }
-
-  h1 {
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 2.2rem;
-    line-height: 1.2;
-    margin: 0 0 28px 0;
-    color: #111;
-  }
-
-  /* ===== Articles ===== */
-
-  #articles a {
-    color: #2d5ea8;
-    text-decoration: none;
-  }
-
-  #articles a:hover {
-    text-decoration: underline;
+  .article-list {
+    margin-top: 1.5rem;
   }
 
   .article {
-    margin-bottom: 28px;
-    padding-bottom: 18px;
-    border-bottom: 1px solid #e0e0e0;
+    padding: 1rem 0;
+    border-bottom: 1px solid #ddd;
   }
 
   .article:last-child {
     border-bottom: none;
   }
 
-  .article-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    line-height: 1.4;
+  .article-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .article-title-link {
+    text-decoration: none;
+  }
+
+  .article-title-link:hover {
+    text-decoration: underline;
   }
 
   .article-meta {
-    margin-top: 6px;
-    font-size: 0.9rem;
     color: #666;
+    font-size: 0.95rem;
+    margin-top: 0.35rem;
   }
 
-  /* ===== Footer ===== */
-
-  footer {
-    margin-top: 40px;
-    padding-top: 24px;
-    border-top: 1px solid #e5e5e5;
-    text-align: center;
+  .original-link {
+    text-decoration: none;
+    font-size: 0.95rem;
   }
 
-  footer p {
-    font-size: 0.9rem;
-    color: #777;
-    margin: 0;
-  }
-
-  /* ===== Mobile ===== */
-
-  @media (max-width: 700px) {
-    .container {
-      margin: 24px 16px;
-      padding: 28px 22px;
-    }
-
-    .site-title {
-      font-size: 2rem;
-    }
-
-    h1 {
-      font-size: 1.6rem;
-    }
+  .original-link:hover {
+    text-decoration: underline;
   }
 </style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="site-title">Continuum Stories</div>
-    <div class="site-subtitle">Workflows, experiments, and real publishing pipelines built with Continuum.</div>
 
-    <h1>Latest Articles</h1>
-    <div id="articles"></div>
+<div class="page-shell">
 
-    <footer>
-      <p>
-        Powered by <a href="https://nostr.com" target="_blank" rel="noopener noreferrer">Nostr</a> +
-        <a href="https://github.com/features/actions" target="_blank" rel="noopener noreferrer">GitHub Actions</a><br/>
-        Content licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a><br/><br/>
-        © 2025–2026 Continuum. All rights reserved.
-      </p>
-    </footer>
-  </div>
+    <div class="nav">
+        <a href="https://mycontinuum.xyz/">Home</a>
+        <a href="https://mycontinuum.xyz/overview.html">Overview</a>
+        <a href="https://drive.google.com/file/d/1jzIAHwQc6JCvgPj7anyAwA3uFARqyJ7-/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Demo</a>
+        <a href="https://mycontinuum.xyz/downloads.html">Downloads</a>
+        <a href="https://mycontinuum.xyz/pricing.html">Pricing</a>
+        <a href="https://mycontinuum.xyz/use_cases.html">Who Continuum Is For</a>
+        <a href="https://mycontinuum.xyz/common_questions.html">Common Questions</a>
+      </div>
 
-  <script>
-    fetch('./articles/index.json')
-      .then(response => response.json())
-      .then(data => {
-        const container = document.getElementById('articles');
-        data.slice(0, 10).forEach(article => {
-          const wrapper = document.createElement('div');
-          wrapper.className = 'article';
+<div class="hero">
 
-          const titleWrapper = document.createElement('div');
-          titleWrapper.style.display = 'flex';
-          titleWrapper.style.alignItems = 'center';
-          titleWrapper.style.gap = '8px';
+ <h1>Continuum Stories</h1>
 
-          const title = document.createElement('a');
-          title.className = 'article-title';
-          title.href = './articles/' + article.slug + '/';
-          title.textContent = article.title;
+<p>
+    Workflows, experiments, and real publishing pipelines built with Continuum.
+</p>
 
-          const originalLink = document.createElement('a');
-          originalLink.href = article.original_url || '#';
-          originalLink.target = '_blank';
-          originalLink.rel = 'noopener noreferrer';
-          originalLink.title = article.original_url || 'Original post not available';
-          originalLink.textContent = '↗';
-          originalLink.style.textDecoration = 'none';
-          originalLink.style.fontSize = '0.9em';
+<p>
+    These articles are published from tagged Nostr events and rendered automatically.
+</p>
 
-          titleWrapper.appendChild(title);
-          titleWrapper.appendChild(originalLink);
+<a class="button" href="https://mycontinuum.xyz/downloads.html">Download Continuum</a>
 
-          const meta = document.createElement('div');
-          meta.className = 'article-meta';
-          meta.textContent = article.date;
+</div>
 
-          wrapper.appendChild(titleWrapper);
-          wrapper.appendChild(meta);
-          container.appendChild(wrapper);
-        });
+<hr>
+
+<div class="section">
+
+<h2>Latest Articles</h2>
+
+<div id="articles" class="article-list"></div>
+
+</div>
+
+<hr>
+
+<div class="section">
+
+<h2>How this works</h2>
+
+<p>
+Articles are written in Continuum, published to Nostr, tagged appropriately, and then picked up automatically by GitHub Actions and rendered here.
+</p>
+
+</div>
+
+<div class="section">
+
+<h2>Why this matters</h2>
+
+<p>
+This site shows a local-first publishing workflow in practice: write once, publish under your own control, and let the rest of the pipeline update automatically.
+</p>
+
+</div>
+
+<hr>
+
+<p>
+
+<strong>Learn more:</strong>
+
+<ul>
+<li><a href="https://mycontinuum.xyz/overview.html">Continuum Overview</a></li>
+<li><a href="https://mycontinuum.xyz/downloads.html">Download Continuum</a></li>
+<li><a href="https://mycontinuum.xyz/pricing.html">Support / Patron Options</a></li>
+</ul>
+
+</p>
+
+<hr>
+
+<footer>
+
+<p>© 2025–2026 Andrew G. Stanton.</p>
+<p>Continuum software and documentation.</p>
+
+<p>Powered by <a href="https://nostr.com" target="_blank" rel="noopener noreferrer">Nostr</a> + <a href="https://github.com/features/actions" target="_blank" rel="noopener noreferrer">GitHub Actions</a>.</p>
+<p>
+Content licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>.
+</p>
+
+</footer>
+
+</div>
+
+<script>
+  fetch('./articles/index.json')
+    .then(response => response.json())
+    .then(data => {
+      const container = document.getElementById('articles');
+
+      data.slice(0, 10).forEach(article => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'article';
+
+        const header = document.createElement('div');
+        header.className = 'article-header';
+
+        const title = document.createElement('a');
+        title.className = 'article-title-link';
+        title.href = './articles/' + article.slug + '/';
+        title.textContent = article.title;
+
+        const originalLink = document.createElement('a');
+        originalLink.className = 'original-link';
+        originalLink.href = article.original_url || '#';
+        originalLink.target = '_blank';
+        originalLink.rel = 'noopener noreferrer';
+        originalLink.title = article.original_url || 'Original post not available';
+        originalLink.textContent = '↗';
+
+        header.appendChild(title);
+        header.appendChild(originalLink);
+
+        const meta = document.createElement('div');
+        meta.className = 'article-meta';
+        meta.textContent = article.date;
+
+        wrapper.appendChild(header);
+        wrapper.appendChild(meta);
+        container.appendChild(wrapper);
       });
-  </script>
+    })
+    .catch(error => {
+      const container = document.getElementById('articles');
+      container.innerHTML = '<p>Unable to load articles right now.</p>';
+      console.error('Error loading articles:', error);
+    });
+</script>
+
 </body>
 </html>
