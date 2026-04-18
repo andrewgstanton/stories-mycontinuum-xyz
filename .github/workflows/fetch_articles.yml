@@ -2,7 +2,7 @@ name: Fetch and Build Articles
 
 on:
   schedule:
-    - cron: '*/10 * * * *'  # Runs every 10 mmin
+    - cron: '*/10 * * * *'  # Runs every 10 min
   workflow_dispatch:      # Allows manual triggering from GitHub UI
 
 jobs:
@@ -35,7 +35,7 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/andrewgstanton/blog-stantonweb-site.git
+          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/andrewgstanton/stories-mycontinuum-xyze.git
 
           git add docs/articles
           git commit -m "Auto-update articles" || echo "No changes to commit"
