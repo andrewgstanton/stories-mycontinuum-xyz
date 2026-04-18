@@ -1,22 +1,121 @@
-<html><body>
-                    <!DOCTYPE html>
-                    <html lang="en">
-                    <head>
-                        <meta charset="UTF-8" />
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                        <title>Continuum - Stories</title>
-                        <link rel="stylesheet" href="../../styles/styles.css" />
-                    </head>
-                    <body>
-                        <h2><div class="site-title">Continuum - Stories</div></h2>
-                        <div class="site-subtitle">Decentralized.  Sovereign. Free. </div>
-                <div class="container">
-        <h1>From Blog.StantonWeb to Continuum Stories  - Reusing a Decentralized Publishing Pipeline</h1>
-        <p><em>Published: April 17, 2026 at 04:57 PM PDT &nbsp; | &nbsp; Updated: April 17, 2026 at 04:57 PM PDT</em></p>
-        <img src='https://2026.mycontinuum.xyz/archive/pro/nostr/npub19wvckp8z58lxs4djuz43pwujka6tthaq77yjd3axttsgppnj0ersgdguvd/images/6_friday.jpg' alt='Hero image' style='max-width: 100%; margin-bottom: 20px;'/>
-        <p><strong>Last summer, I built a decentralized blog using Nostr, GitHub Actions, and GitHub Pages. I’m now taking that same idea and applying it directly to Continuum — turning tagged articles into a live, automatically updating site with zero manual publishing steps.</strong></p>
-        <div class='tags'><span class='tag'>#continuum</span><span class='tag'>#nostr</span><span class='tag'>#github-actions</span><span class='tag'>#local-first publishing workflow</span><span class='tag'>#decentralized-cms</span><span class='tag'>#continuum-stories</span><span class='tag'>#blog</span><span class='tag'>#article</span></div>
-        <p>Friday, April 17, 2026</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>From Blog.StantonWeb to Continuum Stories  - Reusing a Decentralized Publishing Pipeline</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="../../styles/style.css">
+<style>
+  .article-page {
+    max-width: 860px;
+  }
+
+  .article-meta {
+    color: #666;
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+  }
+
+  .article-summary {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .article-hero-image {
+    max-width: 100%;
+    height: auto;
+    margin: 1.5rem 0;
+    display: block;
+  }
+
+  .article-content {
+    margin-top: 1.5rem;
+  }
+
+  .article-content img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .article-content .tags,
+  .article-tags {
+    margin: 1.25rem 0;
+  }
+
+  .article-content .tag,
+  .article-tags .tag {
+    display: inline-block;
+    margin: 0 0.4rem 0.4rem 0;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    color: #444;
+  }
+
+  .original-link-block {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 2rem;
+  }
+
+  .original-link-block a {
+    word-break: break-word;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="page-shell">
+
+  <div class="nav">
+    <a href="https://mycontinuum.xyz/">Home</a>
+    <a href="https://mycontinuum.xyz/overview.html">Overview</a>
+    <a href="https://drive.google.com/file/d/1jzIAHwQc6JCvgPj7anyAwA3uFARqyJ7-/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Demo</a>
+    <a href="https://mycontinuum.xyz/downloads.html">Downloads</a>
+    <a href="https://mycontinuum.xyz/pricing.html">Pricing</a>
+    <a href="https://mycontinuum.xyz/use_cases.html">Who Continuum Is For</a>
+    <a href="https://mycontinuum.xyz/common_questions.html">Questions</a>
+    <a href="https://stories.mycontinuum.xyz/">Stories</a>
+  </div>
+
+  <div class="hero article-page">
+    <p><a href="https://stories.mycontinuum.xyz/">← Back to Stories</a></p>
+
+    <h1>From Blog.StantonWeb to Continuum Stories  - Reusing a Decentralized Publishing Pipeline</h1>
+
+    <p class="article-meta">
+      Published: April 17, 2026 at 04:57 PM PDT
+      &nbsp; | &nbsp;
+      Updated: April 17, 2026 at 04:57 PM PDT
+    </p>
+
+    
+    <img
+      class="article-hero-image"
+      src="https://2026.mycontinuum.xyz/archive/pro/nostr/npub19wvckp8z58lxs4djuz43pwujka6tthaq77yjd3axttsgppnj0ersgdguvd/images/6_friday.jpg"
+      alt="Hero image"
+    >
+    
+
+    
+    <p class="article-summary">
+      <strong>Last summer, I built a decentralized blog using Nostr, GitHub Actions, and GitHub Pages. I’m now taking that same idea and applying it directly to Continuum — turning tagged articles into a live, automatically updating site with zero manual publishing steps.</strong>
+    </p>
+    
+
+    <div class="article-tags"><span class="tag">#continuum</span><span class="tag">#nostr</span><span class="tag">#github-actions</span><span class="tag">#local-first publishing workflow</span><span class="tag">#decentralized-cms</span><span class="tag">#continuum-stories</span><span class="tag">#blog</span><span class="tag">#article</span></div>
+  </div>
+
+  <hr>
+
+  <div class="section article-page">
+    <div class="article-content">
+      <p>Friday, April 17, 2026</p>
 <hr />
 <h2>Introduction</h2>
 <p>Last summer, I built something that quietly changed how I think about publishing.</p>
@@ -217,17 +316,35 @@ Some didn’t.</p>
 <p><strong>the same idea — applied more intentionally</strong></p>
 </blockquote>
 <p>One article at a time.</p>
-        <p style="font-size: 0.8em; color: #777;">
-            Original post: <a href="https://tinyurl.com/25945v9k" target="_blank">https://tinyurl.com/25945v9k</a>
-        </p>
 
-        <footer>
-            <p style="font-size: 0.85em; color: #777;">
-            Powered by <a href="https://nostr.com" target="_blank">Nostr</a> + <a href="https://github.com/features/actions" target="_blank">GitHub Actions</a><br/>
-            Content licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a> <br> <br/>
-                © 2025-2026 - Continuum. All rights reserved. 
-            </br></p>
-        </footer>
-        
-        </div>
-        </body></html>
+      <div class="original-link-block">
+        Original post:
+        <a href="https://tinyurl.com/25945v9k" target="_blank" rel="noopener noreferrer">
+          https://tinyurl.com/25945v9k
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <footer>
+    <p>© 2025–2026 Andrew G. Stanton.</p>
+    <p>Continuum software and documentation.</p>
+
+    <p>
+      Powered by
+      <a href="https://nostr.com" target="_blank" rel="noopener noreferrer">Nostr</a>
+      +
+      <a href="https://github.com/features/actions" target="_blank" rel="noopener noreferrer">GitHub Actions</a>.
+    </p>
+    <p>
+      Content licensed under
+      <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>.
+    </p>
+  </footer>
+
+</div>
+
+</body>
+</html>
