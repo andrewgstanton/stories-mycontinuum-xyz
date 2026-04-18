@@ -1,231 +1,385 @@
-<html><body>
-                    <!DOCTYPE html>
-                    <html lang="en">
-                    <head>
-                        <meta charset="UTF-8" />
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                        <title>Continuum - Stories</title>
-                        <link rel="stylesheet" href="../../styles/styles.css" />
-                    </head>
-                    <body>
-                        <h2><div class="site-title">Continuum - Stories</div></h2>
-                        <div class="site-subtitle">Decentralized.  Sovereign. Free. </div>
-                <div class="container">
-        <h1>From Blog.StantonWeb to Continuum Stories — Getting the Pipeline Working in a New Repo - Part 2</h1>
-        <p><em>Published: April 17, 2026 at 09:18 PM PDT &nbsp; | &nbsp; Updated: April 17, 2026 at 09:18 PM PDT</em></p>
-        <img src='https://2026.mycontinuum.xyz/archive/pro/nostr/npub19wvckp8z58lxs4djuz43pwujka6tthaq77yjd3axttsgppnj0ersgdguvd/images/6_friday.jpg' alt='Hero image' style='max-width: 100%; margin-bottom: 20px;'/>
-        <p><strong>In Part 1, I described the architecture behind a decentralized publishing pipeline using Nostr, GitHub Actions, and GitHub Pages. In this follow-up, I walk through what it actually took to get that same pipeline working again in a new repository — including authentication issues, workflow permissions, and the small but critical details that make it all run automatically.</strong></p>
-        <div class='tags'><span class='tag'>#continuum</span><span class='tag'>#nostr</span><span class='tag'>#github-actions</span><span class='tag'>#workflow automation</span><span class='tag'>#local-first publishing</span><span class='tag'>#decentralized-cms</span><span class='tag'>#blog</span><span class='tag'>#article</span><span class='tag'>#continuum-stories</span></div>
-        <p>Friday, April 17, 2026</p>
-<hr />
-<h2>Introduction</h2>
-<p>In Part 1, I described the idea:</p>
-<blockquote>
-<p>Write locally → publish to Nostr → automatically render to a public site</p>
-</blockquote>
-<p>That part is clean.</p>
-<p>What isn’t clean is getting the pipeline working again in a new repository.</p>
-<p>This article is about that reality.</p>
-<hr />
-<h2>The Goal</h2>
-<p>Recreate the exact same system I built for:</p>
-<blockquote>
-<p>blog.stantonweb.com</p>
-</blockquote>
-<p>But now for:</p>
-<blockquote>
-<p>stories.mycontinuum.xyz</p>
-</blockquote>
-<p>Same model:</p>
-<ul>
-<li>Nostr as the content layer  </li>
-<li>GitHub Actions as the automation  </li>
-<li>GitHub Pages as the host  </li>
-</ul>
-<p>No redesign. Just reuse.</p>
-<hr />
-<h2>What Should Have Been Simple</h2>
-<p>At a high level, the steps were straightforward:</p>
-<ol>
-<li>Create a new GitHub repo  </li>
-<li>Copy over the workflow (<code>fetch_articles.yml</code>)  </li>
-<li>Set the correct repo target  </li>
-<li>Add secrets (<code>GH_PAT</code>, <code>PUBKEY</code>)  </li>
-<li>Push and let it run  </li>
-</ol>
-<p>In theory, that’s it.</p>
-<p>In practice, that’s not it.</p>
-<hr />
-<h2>The First Problem: Workflow Permissions</h2>
-<p>When I tried to push the workflow file, GitHub rejected it:</p>
-<p><strong>refusing to allow a Personal Access Token to create or update workflow .github/workflows/... without workflow scope</strong></p>
-<p>This is one of those rules you only remember after you hit it again.</p>
-<h3>The fix</h3>
-<ul>
-<li>Create a new Personal Access Token (PAT)</li>
-<li>Make sure it has:</li>
-<li><strong>Contents: Read and write</strong></li>
-<li><strong>Workflows: Read and write</strong></li>
-</ul>
-<p>And importantly:</p>
-<blockquote>
-<p>Scope it to the correct repository</p>
-</blockquote>
-<hr />
-<h2>The Second Problem: Wrong Repo Target</h2>
-<p>The workflow I copied was still pointing to the old repo:</p>
-<p><strong>github.com/andrewgstanton/blog-stantonweb-site.git</strong></p>
-<p>So even with the correct token, it would have pushed to the wrong place.</p>
-<h3>The fix</h3>
-<p>Update the remote inside the workflow:</p>
-<p>**git remote set-url origin https://is.gd/wKrNTQ</p>
-<p>Small change. Critical.</p>
-<hr />
-<h2>The Third Problem: SSH vs HTTPS</h2>
-<p>Even though I normally use SSH locally, the push was going to:</p>
-<p>**https://is.gd/NkqXpr</p>
-<p>Which means:</p>
-<blockquote>
-<p>GitHub was using a PAT, not my SSH key</p>
-</blockquote>
-<p>That’s why the <code>workflow</code> permission error appeared during a normal <code>git push</code>.</p>
-<h3>The fix</h3>
-<p>Switch the remote back to SSH:</p>
-<p><strong>git remote set-url origin git@github.com
-:andrewgstanton/stories-mycontinuum-xyz.git</strong></p>
-<p>Then push again.</p>
-<hr />
-<h2>The Fourth Problem: Secrets</h2>
-<p>Two secrets are required:</p>
-<h3>1. GH_PAT</h3>
-<p>This is the Personal Access Token used inside the workflow to push changes.</p>
-<p>Important detail:</p>
-<blockquote>
-<p>The same secret name can exist in multiple repos — with different values</p>
-</blockquote>
-<p>So:</p>
-<ul>
-<li><code>blog-stantonweb-site</code> → old token  </li>
-<li><code>stories-mycontinuum-xyz</code> → new token  </li>
-</ul>
-<hr />
-<h3>2. PUBKEY</h3>
-<p>This is the Nostr public key used to fetch articles.</p>
-<p>In my case:</p>
-<p><strong>npub19wvckp8z58lxs4djuz43pwujka6tthaq77yjd3axttsgppnj0ersgdguvd</strong></p>
-<p>The script handles conversion internally:</p>
-<ul>
-<li>accepts <code>npub</code></li>
-<li>converts to hex if needed</li>
-</ul>
-<p>So no extra work required.</p>
-<hr />
-<h2>The Fifth Problem: No Changes</h2>
-<p>Once everything was wired up, the workflow ran…</p>
-<p>…and did nothing.</p>
-<p>Which is exactly what it should do.</p>
-<p>Because:</p>
-<blockquote>
-<p>The articles had already been generated locally earlier</p>
-</blockquote>
-<p>So:</p>
-<ul>
-<li>no diff  </li>
-<li>no commit  </li>
-<li>no push  </li>
-</ul>
-<p>This is actually a good sign.</p>
-<hr />
-<h2>Verifying the Pipeline</h2>
-<p>The correct way to test is simple:</p>
-<ol>
-<li>Publish a new tagged article  </li>
-<li>Wait for the workflow (or run manually)  </li>
-<li>Watch for:</li>
-<li>new files generated  </li>
-<li>commit created  </li>
-<li>site updated  </li>
-</ol>
-<p>If that works:</p>
-<blockquote>
-<p>The pipeline is live</p>
-</blockquote>
-<hr />
-<h2>What Didn’t Matter</h2>
-<p>Interestingly, one thing I didn’t need to worry about yet:</p>
-<blockquote>
-<p>the domain (<code>stories.mycontinuum.xyz</code>)</p>
-</blockquote>
-<p>The pipeline works independently of DNS.</p>
-<p>GitHub Actions:</p>
-<ul>
-<li>fetches  </li>
-<li>builds  </li>
-<li>commits  </li>
-</ul>
-<p>Whether the domain is configured or not is irrelevant at this stage.</p>
-<hr />
-<h2>What This Reinforced</h2>
-<p>This system is simple in concept:</p>
-<p><strong>publish → tag → automation → site</strong></p>
-<p>But it depends on a few fragile pieces:</p>
-<ul>
-<li>token permissions  </li>
-<li>correct repo targeting  </li>
-<li>environment variables  </li>
-<li>workflow configuration  </li>
-</ul>
-<p>Once those are correct:</p>
-<blockquote>
-<p>it becomes completely automatic again</p>
-</blockquote>
-<hr />
-<h2>Why This Matters</h2>
-<p>Most publishing systems hide this complexity behind:</p>
-<ul>
-<li>dashboards  </li>
-<li>logins  </li>
-<li>platforms  </li>
-</ul>
-<p>But the tradeoff is:</p>
-<blockquote>
-<p>you don’t control the system</p>
-</blockquote>
-<p>This approach flips that:</p>
-<ul>
-<li>you control the pipeline  </li>
-<li>you control the data  </li>
-<li>you control the output</li>
-</ul>
-<p>(but it still isn't trivial)</p>
-<hr />
-<h2>Final Thought</h2>
-<p>Part 1 was about the idea.</p>
-<p>Part 2 is about the reality.</p>
-<p>Getting this working again wasn’t hard — but it wasn’t trivial either.</p>
-<p>And that’s the point.</p>
-<p>Once it’s set up:</p>
-<blockquote>
-<p>it disappears</p>
-</blockquote>
-<p>You go back to:</p>
-<blockquote>
-<p>writing → publishing → tagging</p>
-</blockquote>
-<p>And everything else happens on its own.</p>
-<p>One article at a time.</p>
-<hr />
-        <p style="font-size: 0.8em; color: #777;">
-            Original post: <a href="https://tinyurl.com/2djadfmn" target="_blank">https://tinyurl.com/2djadfmn</a>
-        </p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>From Blog.StantonWeb to Continuum Stories — Getting the Pipeline Working in a New Repo - Part 2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <footer>
-            <p style="font-size: 0.85em; color: #777;">
-            Powered by <a href="https://nostr.com" target="_blank">Nostr</a> + <a href="https://github.com/features/actions" target="_blank">GitHub Actions</a><br/>
-            Content licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a> <br> <br/>
-                © 2025-2026 - Continuum. All rights reserved. 
-            </br></p>
-        </footer>
-        
-        </div>
-        </body></html>
+<link rel="stylesheet" href="../../styles/style.css">
+<style>
+  .article-page {
+    max-width: 860px;
+  }
+
+  .article-meta {
+    color: #666;
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+  }
+
+  .article-summary {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .article-hero-image {
+    max-width: 100%;
+    height: auto;
+    margin: 1.5rem 0;
+    display: block;
+  }
+
+  .article-content {
+    margin-top: 1.5rem;
+  }
+
+  .article-content img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .article-content .tags,
+  .article-tags {
+    margin: 1.25rem 0;
+  }
+
+  .article-content .tag,
+  .article-tags .tag {
+    display: inline-block;
+    margin: 0 0.4rem 0.4rem 0;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    color: #444;
+  }
+
+  .original-link-block {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 2rem;
+  }
+
+  .original-link-block a {
+    word-break: break-word;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="page-shell">
+
+  <div class="nav">
+    <a href="https://mycontinuum.xyz/">Home</a>
+    <a href="https://mycontinuum.xyz/overview.html">Overview</a>
+    <a href="https://drive.google.com/file/d/1jzIAHwQc6JCvgPj7anyAwA3uFARqyJ7-/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Demo</a>
+    <a href="https://mycontinuum.xyz/downloads.html">Downloads</a>
+    <a href="https://mycontinuum.xyz/pricing.html">Pricing</a>
+    <a href="https://mycontinuum.xyz/use_cases.html">Who Continuum Is For</a>
+    <a href="https://mycontinuum.xyz/common_questions.html">Questions</a>
+    <a href="https://stories.mycontinuum.xyz/">Stories</a>
+  </div>
+
+  <div class="hero article-page">
+    <p><a href="https://stories.mycontinuum.xyz/">← Back to Stories</a></p>
+
+    <h1>From Blog.StantonWeb to Continuum Stories — Getting the Pipeline Working in a New Repo - Part 2</h1>
+
+    <p class="article-meta">
+      Published: April 17, 2026 at 09:18 PM PDT
+      &nbsp; | &nbsp;
+      Updated: April 17, 2026 at 09:18 PM PDT
+    </p>
+
+    <img
+      class="article-hero-image"
+      src="https://2026.mycontinuum.xyz/archive/pro/nostr/npub19wvckp8z58lxs4djuz43pwujka6tthaq77yjd3axttsgppnj0ersgdguvd/images/6_friday.jpg"
+      alt="Hero image"
+    >
+
+    <p class="article-summary">
+      <strong>In Part 1, I described the architecture behind a decentralized publishing pipeline using Nostr, GitHub Actions, and GitHub Pages. In this follow-up, I walk through what it actually took to get that same pipeline working again in a new repository — including authentication issues, workflow permissions, and the small but critical details that make it all run automatically.</strong>
+    </p>
+
+    <div class="article-tags">
+      <span class="tag">#continuum</span>
+      <span class="tag">#nostr</span>
+      <span class="tag">#github-actions</span>
+      <span class="tag">#workflow automation</span>
+      <span class="tag">#local-first publishing</span>
+      <span class="tag">#decentralized-cms</span>
+      <span class="tag">#blog</span>
+      <span class="tag">#article</span>
+      <span class="tag">#continuum-stories</span>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="section article-page">
+    <div class="article-content">
+
+      <p>Friday, April 17, 2026</p>
+
+      <hr />
+      <h2>Introduction</h2>
+      <p>In Part 1, I described the idea:</p>
+      <blockquote>
+        <p>Write locally → publish to Nostr → automatically render to a public site</p>
+      </blockquote>
+      <p>That part is clean.</p>
+      <p>What isn’t clean is getting the pipeline working again in a new repository.</p>
+      <p>This article is about that reality.</p>
+
+      <hr />
+      <h2>The Goal</h2>
+      <p>Recreate the exact same system I built for:</p>
+      <blockquote>
+        <p>blog.stantonweb.com</p>
+      </blockquote>
+      <p>But now for:</p>
+      <blockquote>
+        <p>stories.mycontinuum.xyz</p>
+      </blockquote>
+      <p>Same model:</p>
+      <ul>
+        <li>Nostr as the content layer</li>
+        <li>GitHub Actions as the automation</li>
+        <li>GitHub Pages as the host</li>
+      </ul>
+      <p>No redesign. Just reuse.</p>
+
+      <hr />
+      <h2>What Should Have Been Simple</h2>
+      <p>At a high level, the steps were straightforward:</p>
+      <ol>
+        <li>Create a new GitHub repo</li>
+        <li>Copy over the workflow (<code>fetch_articles.yml</code>)</li>
+        <li>Set the correct repo target</li>
+        <li>Add secrets (<code>GH_PAT</code>, <code>PUBKEY</code>)</li>
+        <li>Push and let it run</li>
+      </ol>
+      <p>In theory, that’s it.</p>
+      <p>In practice, that’s not it.</p>
+
+      <hr />
+      <h2>The First Problem: Workflow Permissions</h2>
+      <p>When I tried to push the workflow file, GitHub rejected it:</p>
+      <p><strong>refusing to allow a Personal Access Token to create or update workflow .github/workflows/... without workflow scope</strong></p>
+      <p>This is one of those rules you only remember after you hit it again.</p>
+
+      <h3>The fix</h3>
+      <ul>
+        <li>Create a new Personal Access Token (PAT)</li>
+        <li>Make sure it has:</li>
+        <li><strong>Contents: Read and write</strong></li>
+        <li><strong>Workflows: Read and write</strong></li>
+      </ul>
+
+      <p>And importantly:</p>
+      <blockquote>
+        <p>Scope it to the correct repository</p>
+      </blockquote>
+
+      <hr />
+      <h2>The Second Problem: Wrong Repo Target</h2>
+      <p>The workflow I copied was still pointing to the old repo:</p>
+      <p><strong>github.com/andrewgstanton/blog-stantonweb-site.git</strong></p>
+      <p>So even with the correct token, it would have pushed to the wrong place.</p>
+
+      <h3>The fix</h3>
+      <p>Update the remote inside the workflow:</p>
+      <p><strong>git remote set-url origin https://is.gd/wKrNTQ</strong></p>
+      <p>Small change. Critical.</p>
+
+      <hr />
+      <h2>The Third Problem: SSH vs HTTPS</h2>
+      <p>Even though I normally use SSH locally, the push was going to:</p>
+      <p><strong>https://is.gd/NkqXpr</strong></p>
+      <p>Which means:</p>
+      <blockquote>
+        <p>GitHub was using a PAT, not my SSH key</p>
+      </blockquote>
+
+      <p>That’s why the <code>workflow</code> permission error appeared during a normal <code>git push</code>.</p>
+
+      <h3>The fix</h3>
+      <p>Switch the remote back to SSH:</p>
+      <p><strong>git remote set-url origin git@github.com:andrewgstanton/stories-mycontinuum-xyz.git</strong></p>
+      <p>Then push again.</p>
+
+      <hr />
+      <h2>The Fourth Problem: Secrets</h2>
+      <p>Two secrets are required:</p>
+
+      <h3>1. GH_PAT</h3>
+      <p>This is the Personal Access Token used inside the workflow to push changes.</p>
+      <p>Important detail:</p>
+      <blockquote>
+        <p>The same secret name can exist in multiple repos — with different values</p>
+      </blockquote>
+
+      <p>So:</p>
+      <ul>
+        <li><code>blog-stantonweb-site</code> → old token</li>
+        <li><code>stories-mycontinuum-xyz</code> → new token</li>
+      </ul>
+
+      <hr />
+      <h3>2. PUBKEY</h3>
+      <p>This is the Nostr public key used to fetch articles.</p>
+      <p>In my case:</p>
+      <p><strong>npub19wvckp8z58lxs4djuz43pwujka6tthaq77yjd3axttsgppnj0ersgdguvd</strong></p>
+      <p>The script handles conversion internally:</p>
+      <ul>
+        <li>accepts <code>npub</code></li>
+        <li>converts to hex if needed</li>
+      </ul>
+      <p>So no extra work required.</p>
+
+      <hr />
+      <h2>The Fifth Problem: No Changes</h2>
+      <p>Once everything was wired up, the workflow ran…</p>
+      <p>…and did nothing.</p>
+      <p>Which is exactly what it should do.</p>
+      <p>Because:</p>
+      <blockquote>
+        <p>The articles had already been generated locally earlier</p>
+      </blockquote>
+
+      <p>So:</p>
+      <ul>
+        <li>no diff</li>
+        <li>no commit</li>
+        <li>no push</li>
+      </ul>
+      <p>This is actually a good sign.</p>
+
+      <hr />
+      <h2>Verifying the Pipeline</h2>
+      <p>The correct way to test is simple:</p>
+      <ol>
+        <li>Publish a new tagged article</li>
+        <li>Wait for the workflow (or run manually)</li>
+        <li>Watch for:</li>
+        <li>new files generated</li>
+        <li>commit created</li>
+        <li>site updated</li>
+      </ol>
+
+      <p>If that works:</p>
+      <blockquote>
+        <p>The pipeline is live</p>
+      </blockquote>
+
+      <hr />
+      <h2>What Didn’t Matter</h2>
+      <p>Interestingly, one thing I didn’t need to worry about yet:</p>
+      <blockquote>
+        <p>the domain (<code>stories.mycontinuum.xyz</code>)</p>
+      </blockquote>
+
+      <p>The pipeline works independently of DNS.</p>
+      <p>GitHub Actions:</p>
+      <ul>
+        <li>fetches</li>
+        <li>builds</li>
+        <li>commits</li>
+      </ul>
+
+      <p>Whether the domain is configured or not is irrelevant at this stage.</p>
+
+      <hr />
+      <h2>What This Reinforced</h2>
+      <p>This system is simple in concept:</p>
+      <p><strong>publish → tag → automation → site</strong></p>
+      <p>But it depends on a few fragile pieces:</p>
+      <ul>
+        <li>token permissions</li>
+        <li>correct repo targeting</li>
+        <li>environment variables</li>
+        <li>workflow configuration</li>
+      </ul>
+
+      <p>Once those are correct:</p>
+      <blockquote>
+        <p>it becomes completely automatic again</p>
+      </blockquote>
+
+      <hr />
+      <h2>Why This Matters</h2>
+      <p>Most publishing systems hide this complexity behind:</p>
+      <ul>
+        <li>dashboards</li>
+        <li>logins</li>
+        <li>platforms</li>
+      </ul>
+
+      <p>But the tradeoff is:</p>
+      <blockquote>
+        <p>you don’t control the system</p>
+      </blockquote>
+
+      <p>This approach flips that:</p>
+      <ul>
+        <li>you control the pipeline</li>
+        <li>you control the data</li>
+        <li>you control the output</li>
+      </ul>
+
+      <p>(but it still isn't trivial)</p>
+
+      <hr />
+      <h2>Final Thought</h2>
+      <p>Part 1 was about the idea.</p>
+      <p>Part 2 is about the reality.</p>
+      <p>Getting this working again wasn’t hard — but it wasn’t trivial either.</p>
+      <p>And that’s the point.</p>
+      <p>Once it’s set up:</p>
+      <blockquote>
+        <p>it disappears</p>
+      </blockquote>
+
+      <p>You go back to:</p>
+      <blockquote>
+        <p>writing → publishing → tagging</p>
+      </blockquote>
+
+      <p>And everything else happens on its own.</p>
+      <p>One article at a time.</p>
+
+      <div class="original-link-block">
+        Original post:
+        <a href="https://tinyurl.com/2djadfmn" target="_blank" rel="noopener noreferrer">
+          https://tinyurl.com/2djadfmn
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <hr>
+
+  <footer>
+    <p>© 2025–2026 Andrew G. Stanton.</p>
+    <p>Continuum software and documentation.</p>
+
+    <p>
+      Powered by
+      <a href="https://nostr.com" target="_blank" rel="noopener noreferrer">Nostr</a>
+      +
+      <a href="https://github.com/features/actions" target="_blank" rel="noopener noreferrer">GitHub Actions</a>.
+    </p>
+    <p>
+      Content licensed under
+      <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>.
+    </p>
+  </footer>
+
+</div>
+
+</body>
+</html>
