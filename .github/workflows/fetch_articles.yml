@@ -35,7 +35,7 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/andrewgstanton/stories-mycontinuum-xyze.git
+          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/andrewgstanton/stories-mycontinuum-xyz.git
 
           git add docs/articles
           git commit -m "Auto-update articles" || echo "No changes to commit"
