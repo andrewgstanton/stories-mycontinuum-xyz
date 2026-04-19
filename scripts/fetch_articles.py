@@ -185,7 +185,7 @@ def render_article_html(article):
 <title>{article["title"]}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link rel="stylesheet" href="../../styles/style.css">
+<link rel="stylesheet" href="https://mycontinuum.xyz/styles/style.css">
 <style>
   .article-page {{
     max-width: 860px;
@@ -259,7 +259,7 @@ def render_article_html(article):
     <a href="https://mycontinuum.xyz/downloads.html">Downloads</a>
     <a href="https://mycontinuum.xyz/pricing.html">Pricing</a>
     <a href="https://mycontinuum.xyz/use_cases.html">Who Continuum Is For</a>
-    <a href="https://mycontinuum.xyz/common_questions.html">Questions</a>
+    <a href="https://mycontinuum.xyz/faqs.html">FAQs</a>
     <a href="https://stories.mycontinuum.xyz/">Stories</a>
   </div>
 
