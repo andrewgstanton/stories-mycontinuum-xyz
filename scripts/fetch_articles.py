@@ -261,6 +261,7 @@ def render_article_html(article):
     <a href="https://mycontinuum.xyz/use_cases.html">Who Continuum Is For</a>
     <a href="https://mycontinuum.xyz/faqs.html">FAQs</a>
     <a href="https://mycontinuum.xyz/books.html">Books</a>
+    <a href="https://mycontinuum.xyz/open_source.html">Open Source</a>            
     <a href="https://stories.mycontinuum.xyz/">Stories</a>
   </div>
 
