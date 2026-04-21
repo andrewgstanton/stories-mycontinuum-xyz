@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The Sovereign Small-App Pattern</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="https://mycontinuum.xyz/styles/style.css">
+<style>
+  .article-page {
+    max-width: 860px;
+  }
+
+  .article-meta {
+    color: #666;
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+  }
+
+  .article-summary {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .article-hero-image {
+    max-width: 100%;
+    height: auto;
+    margin: 1.5rem 0;
+    display: block;
+  }
+
+  .article-content {
+    margin-top: 1.5rem;
+  }
+
+  .article-content img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .article-content .tags,
+  .article-tags {
+    margin: 1.25rem 0;
+  }
+
+  .article-content .tag,
+  .article-tags .tag {
+    display: inline-block;
+    margin: 0 0.4rem 0.4rem 0;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    color: #444;
+  }
+
+  .original-link-block {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 2rem;
+  }
+
+  .original-link-block a {
+    word-break: break-word;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="page-shell">
+
+  <div class="nav">
+    <a href="https://mycontinuum.xyz/">Home</a>
+    <a href="https://mycontinuum.xyz/overview.html">Overview</a>
+    <a href="https://drive.google.com/file/d/1jzIAHwQc6JCvgPj7anyAwA3uFARqyJ7-/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Demo</a>
+    <a href="https://mycontinuum.xyz/downloads.html">Downloads</a>
+    <a href="https://mycontinuum.xyz/pricing.html">Pricing</a>
+    <a href="https://mycontinuum.xyz/use_cases.html">Who Continuum Is For</a>
+    <a href="https://mycontinuum.xyz/faqs.html">FAQs</a>
+    <a href="https://mycontinuum.xyz/books.html">Books</a>
+    <a href="https://stories.mycontinuum.xyz/">Stories</a>
+  </div>
+
+  <div class="hero article-page">
+    <p><a href="https://stories.mycontinuum.xyz/">← Back to Stories</a></p>
+
+    <h1>The Sovereign Small-App Pattern</h1>
+
+    <p class="article-meta">
+      Published: April 20, 2026 at 06:30 PM PDT
+      &nbsp; | &nbsp;
+      Updated: April 20, 2026 at 06:30 PM PDT
+    </p>
+
+    
+    <img
+      class="article-hero-image"
+      src="https://2026.mycontinuum.xyz/archive/pro/nostr/npub19wvckp8z58lxs4djuz43pwujka6tthaq77yjd3axttsgppnj0ersgdguvd/images/3_tuesday.jpg"
+      alt="Hero image"
+    >
+    
+
+    
+    <p class="article-summary">
+      <strong>A 1 1/2 hour experiment building a tiny admin tool for Kiki’s Kitchen Table revealed a repeatable architectural pattern for sovereign business applications: local editing, deterministic data, template rendering, and static deployment.</strong>
+    </p>
+    
+
+    <div class="article-tags"><span class="tag">#continuum</span><span class="tag">#sovereignty</span><span class="tag">#software-architecture</span><span class="tag">#static-sites</span><span class="tag">#local-first</span><span class="tag">#builder-log</span><span class="tag">#continuum-stories</span></div>
+  </div>
+
+  <hr>
+
+  <div class="section article-page">
+    <div class="article-content">
+      <p>Andrew G. Stanton - Tuesday, March 10, 2026</p>
+<hr />
+<p>Today started as a small practical exercise: build a lightweight admin tool to manage <strong>Kiki’s Kitchen Table</strong>, a simple affiliate storefront hosted on GitHub Pages.</p>
+<p>The goal was not to build a platform or a full CMS.<br />
+It was simply to make it easier to update products.</p>
+<p>What emerged in the process, however, is something much more interesting.</p>
+<p>In less than two hours we built a <strong>fully sovereign publishing pipeline</strong> for a small business website.</p>
+<p>And the architecture that emerged may be broadly reusable.</p>
+<hr />
+<h1>The Problem</h1>
+<p>The site itself is extremely simple.</p>
+<p>It is a single static page:</p>
+<pre><code>index.html
+images/
+</code></pre>
+<p>Hosted via <strong>GitHub Pages</strong>.</p>
+<p>This is ideal for reliability and cost, but it introduces one small inconvenience:</p>
+<p>Editing the page requires manually modifying HTML.</p>
+<p>For someone comfortable with code this is not a big deal, but for everyday use it is unnecessarily cumbersome.</p>
+<p>What we wanted instead was something simple:</p>
+<p>• Add a product<br />
+• Edit a product<br />
+• Reorder items<br />
+• Export the site  </p>
+<p>Nothing more.</p>
+<p>No database.<br />
+No login system.<br />
+No cloud CMS.</p>
+<hr />
+<h1>The Solution We Built</h1>
+<p>We created a tiny local admin tool.</p>
+<pre><code>Flask
+Docker container
+localhost:7000
+</code></pre>
+<p>The tool allows editing products stored in a simple JSON file:</p>
+<pre><code>products.json
+</code></pre>
+<p>The workflow now looks like this:</p>
+<pre><code>products.json
+↓
+Flask admin UI
+↓
+template render
+↓
+index.html
+↓
+GitHub Pages
+</code></pre>
+<p>The site remains completely static.</p>
+<p>The admin tool simply generates the page.</p>
+<hr />
+<h1>The Architecture</h1>
+<p>This pattern can be summarized very simply.</p>
+<pre><code>data
+↓
+template
+↓
+local tool
+↓
+static output
+↓
+simple hosting
+
+</code></pre>
+<p>Or more concretely:</p>
+<pre><code>products.json
+↓
+Jinja template
+↓
+Flask admin
+↓
+render
+↓
+index.html
+</code></pre>
+<p>The static page is what gets deployed.</p>
+<p>The admin tool is purely local.</p>
+<hr />
+<h1>Why This Matters</h1>
+<p>This approach has several powerful properties.</p>
+<h2>1. No Vendor Lock-In</h2>
+<p>Everything lives inside the repository.</p>
+<pre><code>repo/
+index.html
+images/
+admin/
+products.json
+</code></pre>
+<p>The site can be hosted anywhere:</p>
+<p>• GitHub Pages<br />
+• S3<br />
+• Netlify<br />
+• a static web server<br />
+• local filesystem  </p>
+<p>Nothing depends on a proprietary backend.</p>
+<hr />
+<h2>2. Deterministic Builds</h2>
+<p>The website is always the result of:</p>
+<pre><code>data + template = site
+</code></pre>
+<p>This makes the system:</p>
+<p>• easy to back up<br />
+• easy to version<br />
+• easy to regenerate  </p>
+<p>There is no hidden state.</p>
+<hr />
+<h2>3. No Runtime Infrastructure</h2>
+<p>The public site has <strong>no server</strong>.</p>
+<p>This eliminates entire classes of problems:</p>
+<p>• no database<br />
+• no backend vulnerabilities<br />
+• no updates required<br />
+• no downtime risk  </p>
+<p>The site is simply HTML.</p>
+<hr />
+<h2>4. Local-First Editing</h2>
+<p>All editing happens locally:</p>
+<pre><code>localhost:7000/admin
+</code></pre>
+<p>There are:</p>
+<p>• no login systems<br />
+• no password resets<br />
+• no cloud admin panel<br />
+• no third-party dependencies  </p>
+<p>The editing environment exists entirely on the user's machine.</p>
+<hr />
+<h1>The Sovereign CMS Concept</h1>
+<p>In effect, this creates a <strong>minimal sovereign CMS</strong>.</p>
+<p>Traditional CMS architecture looks like this:</p>
+<pre><code>CMS
+↓
+database
+↓
+server
+↓
+templates
+↓
+website
+</code></pre>
+<p>Our version is dramatically simpler:</p>
+<pre><code>JSON
+↓
+template
+↓
+static site
+</code></pre>
+<p>The complexity disappears.</p>
+<hr />
+<h1>Where This Pattern Can Be Used</h1>
+<p>This pattern generalizes extremely well.</p>
+<p>Examples include:</p>
+<h3>Affiliate storefronts</h3>
+<pre><code>products.json
+</code></pre>
+<h3>Restaurant menus</h3>
+<pre><code>menu.json
+</code></pre>
+<h3>Real estate listings</h3>
+<pre><code>properties.json
+</code></pre>
+<h3>Conference sites</h3>
+<pre><code>speakers.json
+schedule.json
+</code></pre>
+<h3>Service directories</h3>
+<pre><code>services.json
+</code></pre>
+<h3>Ministry project pages</h3>
+<pre><code>projects.json
+</code></pre>
+<p>In each case the pattern remains the same.</p>
+<hr />
+<h1>The Admin Tool Is Optional</h1>
+<p>The admin interface is simply a convenience layer.</p>
+<p>Without it, the site can still be maintained by editing JSON directly.</p>
+<pre><code>edit JSON
+commit
+deploy
+</code></pre>
+<p>The tool simply lowers the friction for everyday updates.</p>
+<hr />
+<h1>The Deeper Insight</h1>
+<p>This small project reveals something interesting.</p>
+<p>Many modern web systems have become unnecessarily complex.</p>
+<p>A typical SaaS stack includes:</p>
+<p>• frontend framework<br />
+• backend framework<br />
+• authentication<br />
+• database<br />
+• API<br />
+• deployment infrastructure  </p>
+<p>For many small business sites, none of this is necessary.</p>
+<p>A static site generated from structured data is often sufficient.</p>
+<hr />
+<h1>Relationship to Continuum</h1>
+<p>The philosophical similarity to <strong>Continuum</strong> is striking.</p>
+<p>Continuum follows a similar pattern:</p>
+<pre><code>identity
+content
+template
+render
+publish
+</code></pre>
+<p>The only difference is the destination.</p>
+<table>
+<thead>
+<tr>
+<th>System</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Continuum</td>
+<td>Nostr events</td>
+</tr>
+<tr>
+<td>Static CMS</td>
+<td>HTML</td>
+</tr>
+<tr>
+<td>Git</td>
+<td>repository</td>
+</tr>
+</tbody>
+</table>
+<p>The underlying model is the same.</p>
+<hr />
+<h1>Time to Build</h1>
+<p>Perhaps the most interesting detail:</p>
+<p>This entire system took <strong>less than two hours</strong> to build.</p>
+<p>Started around <strong>2:23 PM</strong>.<br />
+Finished shortly after at <strong>3:45 PM</strong>.</p>
+<p>The final system includes:</p>
+<p>• local admin interface<br />
+• Docker container<br />
+• editable product list<br />
+• static export<br />
+• GitHub Pages deployment  </p>
+<p>All without introducing any external dependencies.</p>
+<hr />
+<h1>A Pattern Worth Reusing</h1>
+<p>This experiment suggests a broader possibility.</p>
+<p>Instead of building increasingly complex SaaS systems, we might instead create a <strong>library of small sovereign application patterns</strong>.</p>
+<p>Each would follow the same structure:</p>
+<pre><code>structured data
++
+template
++
+local editor
++
+static export
+</code></pre>
+<p>Such systems would be:</p>
+<p>• durable<br />
+• portable<br />
+• easy to maintain<br />
+• easy to host  </p>
+<p>And completely independent of large platforms.</p>
+<hr />
+<h1>Builder's Note</h1>
+<p>Sometimes the most useful architectures emerge from small practical problems.</p>
+<p>Today’s task was simply to make it easier to update a kitchen product list.</p>
+<p>But the pattern that emerged may be applicable to a much wider range of sovereign software.</p>
+<p>This is worth remembering.</p>
+<pre><code>small tools
+simple data
+deterministic output
+</code></pre>
+<p>That combination can go surprisingly far.</p>
+<h2>Appendix: Using AI to Generate Sovereign Apps</h2>
+<p>One obvious question arises from this experiment:</p>
+<p><em>Could an AI system like Claude or Gemini generate an application like this automatically?</em></p>
+<p>The answer is <strong>yes — but only if the right constraints are provided.</strong></p>
+<p>Modern AI systems are extremely capable of generating full applications from prompts. In many cases they can produce:</p>
+<ul>
+<li>working APIs  </li>
+<li>frontend interfaces  </li>
+<li>deployment configurations  </li>
+<li>Docker containers  </li>
+</ul>
+<p>within minutes.</p>
+<p>However, most AI systems default to the <strong>dominant SaaS architecture</strong> unless instructed otherwise.</p>
+<p>A typical prompt such as:</p>
+<blockquote>
+<p>Build an admin system for managing products on a website.</p>
+</blockquote>
+<p>may produce something like:</p>
+<pre><code>React frontend
+↓
+Node API
+↓
+Postgres database
+↓
+authentication
+↓
+cloud deployment
+</code></pre>
+<p>While this architecture works, it introduces unnecessary complexity for many small business websites.</p>
+<p>The key insight is that <strong>AI will follow the constraints you provide</strong>.</p>
+<p>When you clearly define the architecture you want, the results are dramatically different.</p>
+<h3>Example Prompt with Sovereign Constraints</h3>
+<p>A prompt like the following will usually produce a much simpler system:</p>
+<pre><code>Build a small local-only admin application for managing products on a static website.
+
+Requirements:
+
+- run locally using Docker
+- bind to localhost:7000
+- do not use a database
+- store all product data in products.json
+- use Jinja templates to render templates/index.html
+- export a static index.html for deployment
+- include an admin interface to add/edit/delete/reorder products
+- support image paths like images/example.jpg
+- generate build.sh, run.sh, and stop.sh scripts
+- do not use docker-compose
+
+the final site must be static and deployable to GitHub Pages
+</code></pre>
+<p>With constraints like these, an AI system will usually produce an architecture very similar to the one built in this experiment.</p>
+<h3>The Important Distinction</h3>
+<p>AI is extremely good at <strong>implementing systems</strong>.</p>
+<p>But the <strong>architecture still comes from the builder.</strong></p>
+<p>A helpful way to think about the relationship is:</p>
+<pre><code>human
+↓
+architecture constraints
+↓
+AI
+↓
+implementation
+</code></pre>
+<p>If the architecture is clear, AI can produce the code very quickly.</p>
+<p>If the architecture is vague, the resulting system may be unnecessarily complex.</p>
+<h3>A Repeatable Pattern</h3>
+<p>Once a pattern like this is defined, it becomes very easy to generate variations.</p>
+<p>For example, the same prompt structure can produce:</p>
+<pre><code>restaurant-menu.json
+conference-schedule.json
+real-estate-listings.json
+services-directory.json
+</code></pre>
+<p>Each using the same sovereign architecture:</p>
+<pre><code>structured data
++
+template
++
+local editor
++
+static export
+</code></pre>
+<p>AI makes these variations faster to generate, but the core design remains the same.</p>
+<h3>The Real Skill</h3>
+<p>The emerging skill for builders may not be writing code.</p>
+<p>It may be <strong>defining the right architectural constraints</strong> so that the generated software remains:</p>
+<ul>
+<li>simple  </li>
+<li>portable  </li>
+<li>deterministic  </li>
+<li>locally controlled  </li>
+</ul>
+<p>When those constraints are clear, AI becomes an extremely powerful implementation tool.</p>
+<p>But the responsibility for choosing the architecture still belongs to the builder.</p>
+
+      <div class="original-link-block">
+        Original post:
+        <a href="https://tinyurl.com/27unhqsg" target="_blank" rel="noopener noreferrer">
+          https://tinyurl.com/27unhqsg
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <footer>
+    <p>© 2025–2026 Andrew G. Stanton.</p>
+    <p>Continuum software and documentation.</p>
+
+    <p>
+      Powered by
+      <a href="https://nostr.com" target="_blank" rel="noopener noreferrer">Nostr</a>
+      +
+      <a href="https://github.com/features/actions" target="_blank" rel="noopener noreferrer">GitHub Actions</a>.
+    </p>
+    <p>
+      Content licensed under
+      <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>.
+    </p>
+  </footer>
+
+</div>
+
+</body>
+</html>
